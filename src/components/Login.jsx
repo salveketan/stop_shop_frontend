@@ -11,46 +11,30 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 export default function Login() {
-    var headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
 
-
-
-    // const [user, setUser] = useState({
-    //     email: "", password: ""
-    // });
-
-    // let name, value
-    // const handle = (e) => {
-    //     // console.log(e);
-    //     name = e.target.name;
-    //     value = e.target.value;
-    //     setUser({ ...user, [name]: value })
-    // }
-    // console.log(user);
     const navigate = useNavigate()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [cookie, setCookie] = useCookies([])
 
     const userlogin = async (e) => {
         e.preventDefault();
 
-        let res = await fetch("http://localhost:5000/login", {
+        const res = await fetch("http://localhost:5000/login", {
             method: "POST",
-            // mode: 'same-origin',
-            redirect: 'follow',
-            headers: headers,
-            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({
                 email, password
             })
-        });
-        const data = res.json();
-        // console.log(res);
-
+        })
+        const data = await res.json();
+        // console.log("ketan", data);
+        setCookie('Name', data);
         if (res.status === 401 || !data) {
             window.alert("invalid credentials")
         }
@@ -64,6 +48,7 @@ export default function Login() {
         // console.log(data);
     }
 
+    // console.log(cookie);
     return (
         <Flex
             minH={'100vh'}

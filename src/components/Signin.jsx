@@ -23,7 +23,10 @@ export default function Signup() {
     let navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [user, setUser] = useState({
-        name: "", email: "", password: "", phone: ""
+        // name: "", 
+        email: "",
+        password: "",
+        // phone: ""
     });
     let name, value
     const handle = (e) => {
@@ -37,7 +40,7 @@ export default function Signup() {
         e.preventDefault();
         const { name, email, password, phone } = user;
         // console.log(name, email, password);
-        const data = await fetch("http://localhost:5000/signup", {
+        const data = await fetch("http://localhost:5000/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -48,16 +51,15 @@ export default function Signup() {
         })
         console.log(data);
         const res = await data.json();
-        if (data.status === 422 || !res) {
+        if (data.status === 400 || !res) {
             window.alert("invalid registration");
             console.log("invalid registration");
         } else {
             window.alert("susscefull registration");
             console.log("susscefull registration");
-            // <Navigate to="/login" />
             navigate("/login", { replace: true });
         }
-        // console.log(data.status);
+
     }
 
     return (
